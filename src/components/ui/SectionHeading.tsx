@@ -19,7 +19,7 @@ export function SectionHeading({
   return (
     <Component
       id={id}
-      className={`font-display font-extrabold text-[clamp(1.75rem,5.5vw,3.75rem)] leading-[1.05] tracking-[-0.03em] text-[var(--ink)] max-w-full break-words ${className}`}
+      className={`font-display font-extrabold text-[length:var(--fs-h2)] leading-[1.05] tracking-[-0.03em] text-[var(--ink)] max-w-full break-words ${className}`}
     >
       {lines.map((line, idx) => (
         <span key={idx} className="block overflow-hidden pb-1 max-w-full">

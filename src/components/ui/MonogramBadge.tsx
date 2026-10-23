@@ -11,10 +11,10 @@ export function MonogramBadge({
 }: MonogramBadgeProps) {
   const sizeClasses =
     size === "sm"
-      ? "w-8 h-8 text-[0.875rem] rounded-[8px]"
+      ? "w-8 h-8 text-[length:var(--fs-sm)] rounded-[8px]"
       : size === "lg"
-      ? "w-14 h-14 text-[1.5rem] rounded-[16px]"
-      : "w-10 h-10 text-[1.125rem] rounded-[10px]";
+      ? "w-14 h-14 text-[length:var(--fs-xl)] rounded-[16px]"
+      : "w-10 h-10 text-[length:var(--fs-lg)] rounded-[10px]";
 
   return (
     <div

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import type { ExperienceItem } from "@/content/site";
 
@@ -49,26 +50,40 @@ export function Accordion({
               className="w-full flex items-center justify-between gap-4 p-4 md:p-5 text-left cursor-pointer group select-none transition-colors"
             >
               <div className="flex items-center gap-3.5 md:gap-4 min-w-0">
-                {/* Neutral letter tile in palette */}
-                <div
-                  aria-hidden="true"
-                  className="w-10 h-10 md:w-11 md:h-11 rounded-[10px] border-2 border-[var(--ink)] shadow-[2px_2px_0_0_var(--ink)] flex items-center justify-center font-display font-extrabold text-[1rem] md:text-[1.125rem] shrink-0 bg-[var(--cream-2)] text-[var(--ink)] group-hover:scale-105 transition-transform"
-                >
-                  {item.monogram}
+                {/* Logo tile (Phase 7 §4.2), or the neutral letter tile when no official logo is available.
+                    A fixed 72px slot keeps the company names aligned. */}
+                <div aria-hidden="true" className="w-[72px] shrink-0 flex justify-center">
+                  {item.logo ? (
+                    <div className={`h-10 md:h-11 ${item.logo.width / item.logo.height > 1.6 ? "w-[72px]" : "w-10 md:w-11"} rounded-[10px] border-2 border-[var(--ink)] shadow-[2px_2px_0_0_var(--ink)] flex items-center justify-center bg-[var(--white)] group-hover:scale-105 transition-transform`}>
+                      <Image
+                        src={item.logo.src}
+                        alt=""
+                        width={item.logo.width}
+                        height={item.logo.height}
+                        unoptimized
+                        className="object-contain"
+                        style={{ width: item.logo.width, height: item.logo.height }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-[10px] border-2 border-[var(--ink)] shadow-[2px_2px_0_0_var(--ink)] flex items-center justify-center font-display font-extrabold text-[length:var(--fs-base)] shrink-0 bg-[var(--cream-2)] text-[var(--ink)] group-hover:scale-105 transition-transform">
+                      {item.monogram}
+                    </div>
+                  )}
                 </div>
 
-                <div className="min-w-0 flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
-                  <span className="font-display font-bold text-[1.0625rem] md:text-[1.1875rem] text-[var(--ink)] truncate">
+                <div className="min-w-0 flex flex-col sm:flex-row sm:items-baseline sm:gap-3 lg:flex-col lg:items-start lg:gap-0 xl:flex-row xl:items-baseline xl:gap-3">
+                  <span className="font-display font-bold text-[length:var(--fs-body)] text-[var(--ink)] truncate">
                     {item.company}
                   </span>
-                  <span className="font-body text-[0.875rem] md:text-[0.9375rem] text-[var(--muted)] truncate">
+                  <span className="font-body text-[length:var(--fs-sm)] text-[var(--muted)] sm:truncate">
                     {item.role}
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 md:gap-5 shrink-0 pl-2">
-                <span className="font-body text-[0.8125rem] md:text-[0.875rem] font-medium text-[var(--muted)] hidden sm:inline">
+                <span className="font-body text-[length:var(--fs-sm)] font-medium text-[var(--muted)] hidden sm:inline">
                   {item.dates}
                 </span>
                 <div
@@ -85,7 +100,7 @@ export function Accordion({
             </button>
 
             {/* Mobile dates display if screen is narrow */}
-            <div className="sm:hidden px-4 -mt-2 pb-2 text-[0.8125rem] font-medium text-[var(--muted)]">
+            <div className="sm:hidden px-4 -mt-2 pb-2 text-[length:var(--fs-sm)] font-medium text-[var(--muted)]">
               {item.dates}
             </div>
 
@@ -101,7 +116,7 @@ export function Accordion({
               }}
             >
               <div className="overflow-hidden">
-                <div className="px-4 pb-5 md:px-5 md:pb-6 pt-1 text-[var(--muted)] font-body text-[0.95rem] md:text-[1.03125rem] leading-[1.65] border-t border-[var(--ink)]/10">
+                <div className="px-4 pb-5 md:px-5 md:pb-6 pt-1 text-[var(--muted)] font-body text-[length:var(--fs-body)] leading-[1.65] border-t border-[var(--ink)]/10">
                   <p>{item.expandedText}</p>
                 </div>
               </div>

@@ -23,7 +23,7 @@ export function Chip({
   return (
     <span
       onClick={onClick}
-      className={`chip-pill inline-flex items-center justify-center px-4 py-1.5 text-[0.875rem] font-medium tracking-tight text-[var(--ink)] select-none ${bgClass} ${className}`}
+      className={`chip-pill inline-flex items-center justify-center px-4 py-1.5 text-[length:var(--fs-sm)] font-medium tracking-tight text-[var(--ink)] select-none ${bgClass} ${className}`}
     >
       {children}
     </span>
