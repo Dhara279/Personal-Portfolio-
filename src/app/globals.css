@@ -1,0 +1,315 @@
+@import "tailwindcss";
+@source "../**/*.{ts,tsx}";
+@source "../../src/**/*.{ts,tsx}";
+
+:root {
+  /* Surfaces */
+  --cream: #FCF9F2;
+  --cream-2: #FAF7EF;
+  --blush: #F8DFD6;
+  --blush-light: #FCEFE6;
+  --portrait: #FBE5D9;
+  --sage: #EBEEE0;
+  --sand: #F1E7DA;
+  --white: #FFFFFF;
+
+  /* Ink (olive-charcoal) */
+  --ink: #343C2D;
+  --ink-deep: #2B3125;
+  --ink-soft: #4F5349;
+  --muted: #65665F;
+  --line: #5F5F58;
+
+  /* Terracotta family */
+  --terracotta: #B8766A;
+  --terracotta-strong: #A9604F;
+  --terracotta-light: #C98478;
+  --coral: #EEB0A2;
+  --rust: #94503F;
+
+  /* Shape */
+  --bw: 2px;
+  --radius-card: 14px;
+  --radius-btn: 10px;
+  --radius-pill: 999px;
+  --shadow-hard: 3px 4px 0 0 var(--ink);
+  --shadow-hard-lg: 5px 7px 0 0 var(--ink);
+
+  /* Motion */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+
+  /* Layout */
+  --container: 1320px;
+  --gutter: clamp(1rem, 3.8vw, 2.75rem);
+  --section-space: clamp(4rem, 5.5vw, 6rem);
+  --header-h: 72px;
+
+  /* Ambient */
+  --sx: 50%;
+  --sy: 50%;
+}
+
+@theme {
+  --color-cream: var(--cream);
+  --color-cream-2: var(--cream-2);
+  --color-blush: var(--blush);
+  --color-blush-light: var(--blush-light);
+  --color-portrait: var(--portrait);
+  --color-sage: var(--sage);
+  --color-sand: var(--sand);
+  --color-white: var(--white);
+
+  --color-ink: var(--ink);
+  --color-ink-deep: var(--ink-deep);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-strong: var(--terracotta-strong);
+  --color-terracotta-light: var(--terracotta-light);
+  --color-coral: var(--coral);
+  --color-rust: var(--rust);
+
+  --font-display: var(--font-bricolage), sans-serif;
+  --font-body: var(--font-dm-sans), sans-serif;
+
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-nav: 900px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+}
+
+html {
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-dm-sans), sans-serif;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--terracotta) 28%, transparent);
+}
+
+/* Global accessible focus indicator (Brief §8.8, Phase 1 mandate) */
+:focus-visible {
+  outline: 2px solid var(--terracotta-strong) !important;
+  outline-offset: 3px !important;
+}
+
+/* Reduced motion support (Brief §8.9) */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Eyebrow arrival flash animation */
+[data-flash="1"] {
+  position: relative;
+}
+[data-flash="1"]::after {
+  content: "";
+  position: absolute;
+  inset: -3px -8px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--terracotta) 24%, transparent);
+  animation: flashSweep 1s ease-out 2;
+  pointer-events: none;
+}
+
+@keyframes flashSweep {
+  0% { opacity: 0; transform: scaleX(0.85); }
+  50% { opacity: 1; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1.05); }
+}
+
+/* Prevent flash before intro timeline (Brief §8.4) */
+html.js-motion [data-intro]:not([data-intro="tagline"]):not([data-intro="subtitle"]) {
+  visibility: hidden;
+}
+
+/* Section eyebrow arrival flash (Brief §8.3) */
+[data-flash="1"] {
+  animation: eyebrowArrivalFlash 1s ease-in-out 2;
+}
+
+@keyframes eyebrowArrivalFlash {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: color-mix(in srgb, var(--terracotta) 28%, transparent);
+    border-radius: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+/* Sticky header elevation styles (Brief §8.3) */
+header[data-stuck="1"] {
+  border-bottom: 2px solid var(--ink);
+  background-color: color-mix(in srgb, var(--cream) 94%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Card classes */
+.card-bordered {
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-hard);
+  transition: transform 0.26s var(--ease-out), box-shadow 0.26s var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-bordered:hover {
+    transform: translate(-2px, -3px);
+    box-shadow: var(--shadow-hard-lg);
+  }
+}
+
+.card-soft {
+  border-radius: var(--radius-card);
+  transition: transform 0.26s var(--ease-out), box-shadow 0.26s var(--ease-out);
+}
+
+/* Primary Button ink fill wipe effect (Brief §8.8) */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--terracotta-strong);
+  color: var(--white);
+  border-radius: var(--radius-btn);
+  font-family: var(--font-dm-sans), sans-serif;
+  font-weight: 700;
+  transition: transform 0.26s var(--ease-out), box-shadow 0.26s var(--ease-out);
+  box-shadow: var(--shadow-hard);
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.38s var(--ease-out);
+  z-index: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover {
+    transform: translate(-1px, -2px);
+    box-shadow: var(--shadow-hard-lg);
+  }
+  .btn-primary:hover::before {
+    transform: scaleX(1);
+  }
+}
+
+.btn-primary > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Outline Button */
+.btn-outline {
+  background-color: var(--cream-2);
+  color: var(--ink);
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius-btn);
+  font-family: var(--font-dm-sans), sans-serif;
+  font-weight: 700;
+  transition: transform 0.26s var(--ease-out), box-shadow 0.26s var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-outline:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 0 var(--ink);
+  }
+}
+
+/* Chip/Pill */
+.chip-pill {
+  border: 1.5px solid var(--ink);
+  background-color: var(--cream-2);
+  color: var(--ink);
+  border-radius: var(--radius-pill);
+  transition: transform 0.2s var(--ease-out), border-color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip-pill:hover {
+    transform: translateY(-2px);
+    border-color: var(--terracotta);
+    background-color: color-mix(in srgb, var(--terracotta) 12%, var(--cream));
+  }
+}
+
+/* Tool chip: rounded rectangle ~8px */
+.chip-rect {
+  border: 1.5px solid var(--ink);
+  background-color: var(--cream-2);
+  color: var(--ink);
+  border-radius: 8px;
+  transition: transform 0.2s var(--ease-out), border-color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip-rect:hover {
+    transform: translateY(-2px);
+    border-color: var(--terracotta);
+    background-color: color-mix(in srgb, var(--terracotta) 12%, var(--cream));
+  }
+}
+
+/* "View all work ->" expanding underline highlight (Brief §8.8) */
+.link-highlight {
+  position: relative;
+  background-image: linear-gradient(var(--blush), var(--blush));
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.28s var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link-highlight:hover {
+    background-size: 100% 100%;
+  }
+}
+
+/* Nav breakpoint guarantees (<900px vs >=900px) */
+@media (max-width: 899.98px) {
+  .nav-desktop { display: none !important; }
+  .nav-mobile { display: flex !important; }
+}
+@media (min-width: 900px) {
+  .nav-desktop { display: flex !important; }
+  .nav-mobile { display: none !important; }
+  .nav\:flex { display: flex !important; }
+  .nav\:block { display: block !important; }
+  .nav\:hidden { display: none !important; }
+  .nav\:inline-flex { display: inline-flex !important; }
+}
