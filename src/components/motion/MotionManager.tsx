@@ -28,51 +28,9 @@ export function MotionManager() {
         defaults: { ease: "power3.out" },
       });
 
-      // 0: hero background layers (glow)
-      tl.fromTo(
-        "#hero-glow",
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: 0.6 },
-        0
-      );
-
-      // 0.05: Location line
-      tl.fromTo(
-        '[data-intro="location"]',
-        { y: 14, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.4 },
-        0.05
-      );
-
-      // 0.10: Name lines
-      tl.fromTo(
-        ".hero-name-line",
-        { yPercent: 108, autoAlpha: 0 },
-        { yPercent: 0, autoAlpha: 1, duration: 0.6, stagger: 0.08 },
-        0.10
-      );
-
-      // 0.15: Subtitle & Tagline
-      tl.fromTo(
-        '[data-intro="subtitle"]',
-        { yPercent: 105, autoAlpha: 0 },
-        { yPercent: 0, autoAlpha: 1, duration: 0.5 },
-        0.15
-      );
-      tl.fromTo(
-        '[data-intro="tagline"]',
-        { yPercent: 105, autoAlpha: 0 },
-        { yPercent: 0, autoAlpha: 1, duration: 0.5 },
-        0.18
-      );
-
-      // 0.25: Portrait card (rest at -2deg)
-      tl.fromTo(
-        '[data-intro="portrait-card"]',
-        { y: 24, rotate: -6, autoAlpha: 0 },
-        { y: 0, rotate: -2, autoAlpha: 1, duration: 0.7 },
-        0.25
-      );
+      // Location, name, subtitle, tagline, portrait card, doodles and buttons
+      // animate in CSS (globals.css, "Hero intro") so they paint before JS loads.
+      // Same timings as before; GSAP keeps the blob, stat cards and count-up.
 
       // 0.30: Coral blob
       tl.fromTo(
@@ -80,22 +38,6 @@ export function MotionManager() {
         { scale: 0.85, autoAlpha: 0 },
         { scale: 1, autoAlpha: 1, duration: 0.8 },
         0.30
-      );
-
-      // 0.40: Doodles
-      tl.fromTo(
-        '[data-intro="doodle-sparkle"], [data-intro="doodle-squiggle"]',
-        { scale: 0.5, autoAlpha: 0 },
-        { scale: 1, autoAlpha: 1, duration: 0.6, stagger: 0.1 },
-        0.40
-      );
-
-      // 0.45: Hero buttons
-      tl.fromTo(
-        '[data-intro="buttons"] button, [data-intro="buttons"] a',
-        { y: 18, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.06 },
-        0.45
       );
 
       // 0.55: Stats cards
@@ -192,28 +134,7 @@ export function MotionManager() {
           });
         });
 
-        // Tools bar chips staggered reveal
-        const toolsBar = document.querySelector(".tools-bar");
-        if (toolsBar) {
-          ScrollTrigger.create({
-            trigger: toolsBar,
-            start: "top 70%",
-            once: true,
-            onEnter: () => {
-              gsap.fromTo(
-                ".tools-bar .chip-rect",
-                { y: 12, autoAlpha: 0 },
-                {
-                  y: 0,
-                  autoAlpha: 1,
-                  duration: 0.45,
-                  stagger: 0.025,
-                  ease: "power3.out",
-                }
-              );
-            },
-          });
-        }
+        // Tools bar: the card fades up with .reveal; its logo rows drift in CSS (ToolsMarquee).
 
         // Work card illustrations animation
         const workCards = document.querySelectorAll(".work-card");
@@ -261,15 +182,33 @@ export function MotionManager() {
           const sec = document.getElementById(id);
           if (sec) {
             const isContact = id === "contact";
+            const isAbout = id === "about";
             ScrollTrigger.create({
               trigger: sec,
               start: isContact ? "top 80%" : "top 55%",
               end: isContact ? "bottom bottom" : "bottom 55%",
               onEnter: () => setActiveNav(id),
               onEnterBack: () => setActiveNav(id),
+              onLeaveBack: () => {
+                if (isAbout) {
+                  setActiveNav("");
+                }
+              },
             });
           }
         });
+
+        // Hero safeguard: ensure no link is active while in the hero
+        const heroSec = document.getElementById("hero");
+        if (heroSec) {
+          ScrollTrigger.create({
+            trigger: heroSec,
+            start: "top top",
+            end: "bottom 55%",
+            onEnter: () => setActiveNav(""),
+            onEnterBack: () => setActiveNav(""),
+          });
+        }
 
         // Bottom-of-page safeguard: activate Contact when scrolled to the very bottom
         ScrollTrigger.create({
@@ -281,14 +220,19 @@ export function MotionManager() {
       }, 60);
 
       function setActiveNav(activeId: string) {
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("nav-active-change", { detail: activeId })
+          );
+        }
         document.querySelectorAll('nav a[href^="#"]').forEach((link) => {
           const href = link.getAttribute("href");
-          if (href === `#${activeId}`) {
+          if (activeId && href === `#${activeId}`) {
             link.setAttribute("data-on", "1");
-            link.classList.add("bg-[var(--ink)]/[0.07]");
+            link.setAttribute("aria-current", "true");
           } else {
             link.removeAttribute("data-on");
-            link.classList.remove("bg-[var(--ink)]/[0.07]");
+            link.removeAttribute("aria-current");
           }
         });
       }
