@@ -8,10 +8,10 @@ import { Doodle } from "@/components/ui/Doodle";
 export function Contact() {
   return (
     <section id="contact" className="contact-section relative w-full pb-5 md:pb-7 overflow-hidden">
-      {/* Soft radial field parallax background (Brief §8.7) */}
+      {/* Soft radial field parallax background (Brief §8.7 / Phase 7 §1) */}
       <div
         aria-hidden="true"
-        className="contact-parallax-bg absolute -inset-x-20 -inset-y-16 pointer-events-none z-0 opacity-40 will-change-transform"
+        className="contact-parallax-bg absolute inset-0 pointer-events-none z-0 opacity-40 will-change-transform"
         style={{
           background:
             "radial-gradient(ellipse 65% 55% at 50% 50%, var(--blush) 0%, var(--coral) 40%, transparent 80%)",
@@ -24,9 +24,9 @@ export function Contact() {
           <div className="lg:col-span-5 flex flex-col gap-2 min-w-0">
             <Eyebrow sectionId="contact">{siteConfig.contact.eyebrow}</Eyebrow>
             <div className="flex items-center gap-3">
-              <h2 className="font-display font-extrabold text-[clamp(2.15rem,3.8vw,3.5rem)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">
-                <span className="block">Let&apos;s talk about</span>
-                <span className="block">better AI products.</span>
+              <h2 className="font-display font-extrabold text-[length:var(--fs-h2)] leading-[1.02] tracking-[-0.03em] text-[var(--ink)]">
+                <span className="block">Let’s talk about</span>
+                <span className="block">better AI strategies and products.</span>
               </h2>
               {/* Sparkle doodle beside heading (Item 5) */}
               <div className="shrink-0 -mt-2">
@@ -43,7 +43,7 @@ export function Contact() {
                 href={`mailto:${siteConfig.contact.email}`}
                 variant="primary"
                 leadingIcon={<Mail className="w-4 h-4 text-white shrink-0" strokeWidth={2.25} />}
-                className="py-2.5 px-3.5 text-[0.8125rem] sm:text-[0.875rem] shadow-[2px_3px_0_0_var(--ink)] shrink-0 whitespace-nowrap"
+                className="py-2.5 px-3.5 text-[length:var(--fs-sm)] shadow-[2px_3px_0_0_var(--ink)] shrink-0 whitespace-nowrap"
               >
                 {siteConfig.contact.email}
               </Button>
@@ -59,7 +59,7 @@ export function Contact() {
                     in
                   </span>
                 }
-                className="py-2.5 px-3.5 text-[0.8125rem] sm:text-[0.875rem] shrink-0 whitespace-nowrap"
+                className="py-2.5 px-3.5 text-[length:var(--fs-sm)] shrink-0 whitespace-nowrap"
               >
                 {siteConfig.contact.linkedInLabel}
               </Button>
@@ -71,14 +71,14 @@ export function Contact() {
                 rel="noopener noreferrer"
                 variant="outline"
                 leadingIcon={<FileText className="w-4 h-4 text-[var(--ink)] shrink-0" strokeWidth={2.25} />}
-                className="py-2.5 px-3.5 text-[0.8125rem] sm:text-[0.875rem] shrink-0 whitespace-nowrap"
+                className="py-2.5 px-3.5 text-[length:var(--fs-sm)] shrink-0 whitespace-nowrap"
               >
                 {siteConfig.contact.cvLabel}
               </Button>
             </div>
 
             {/* Location underneath aligned to email button left edge */}
-            <div className="inline-flex items-center gap-1.5 text-[0.875rem] font-medium text-[var(--ink-soft)] font-body pl-0.5">
+            <div className="inline-flex items-center gap-1.5 text-[length:var(--fs-sm)] font-medium text-[var(--ink-soft)] font-body pl-0.5">
               <MapPin className="w-4 h-4 text-[var(--rust)] shrink-0" strokeWidth={2.25} />
               <span>{siteConfig.contact.location}</span>
             </div>

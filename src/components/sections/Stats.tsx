@@ -20,7 +20,7 @@ export function Stats() {
           {siteConfig.stats.map((stat) => {
             const IconComponent = iconMap[stat.icon];
             const isRust = stat.iconColor === "rust";
-            const isDistinction = stat.value === "Distinction";
+            const isDistinction = stat.numericTarget === undefined; // word values ("AI Strategy", "MSc · Distinction") keep the existing word style
 
             return (
               <Card
@@ -30,22 +30,20 @@ export function Stats() {
                 tone={stat.tone}
                 className="stat-card flex flex-col p-3 sm:p-4 md:p-5 lg:p-6 min-w-0"
               >
-                {/* Top Icon (~1.5x bigger, ~34-38px) */}
-                <div className="mb-2 sm:mb-3">
+                {/* Top Icon Block (A10: 28px in cards, rust, strokeWidth 1.75) */}
+                <div className="mb-3 h-7 flex items-center">
                   <IconComponent
-                    className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 ${
-                      isRust ? "text-[var(--rust)]" : "text-[var(--ink)]"
-                    }`}
-                    strokeWidth={2.2}
+                    className="w-7 h-7 text-[var(--rust)] shrink-0"
+                    strokeWidth={1.75}
                   />
                 </div>
 
-                {/* Number Value */}
+                {/* Number Value Block with fixed height and baseline (A8 & A9) */}
                 <div
-                  className={`font-display font-extrabold text-[var(--ink)] tracking-tight leading-[1.0] mb-1.5 flex items-baseline gap-2 truncate ${
+                  className={`font-display font-extrabold text-[var(--ink)] tracking-tight leading-none mb-1.5 flex items-baseline tabular-nums ${
                     isDistinction
-                      ? "text-[clamp(1.15rem,4.2vw,2.25rem)]"
-                      : "text-[clamp(1.45rem,5.6vw,3rem)]"
+                      ? "text-[clamp(1.2rem,2.8vw,2rem)] min-h-[36px] sm:min-h-[44px] md:min-h-[48px]"
+                      : "text-[length:var(--fs-xl)] max-[380px]:text-[1.5rem] h-[36px] sm:h-[44px] md:h-[48px] truncate"
                   }`}
                 >
                   {stat.prefix && <span>{stat.prefix}</span>}
@@ -58,14 +56,14 @@ export function Stats() {
                       : stat.value}
                   </span>
                   {stat.suffix && (
-                    <span className="stat-suffix">
+                    <span className="stat-suffix ml-1">
                       {stat.suffix.trim()}
                     </span>
                   )}
                 </div>
 
                 {/* Stat Label sits close to number */}
-                <p className="font-body text-[0.8125rem] sm:text-[0.875rem] font-medium text-[var(--muted)] leading-snug">
+                <p className="font-body text-[length:var(--fs-sm)] font-medium text-[var(--muted)] leading-snug">
                   {stat.label}
                 </p>
               </Card>

@@ -11,26 +11,21 @@ export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
-  // Neutral DP monogram tile used as in mockup
-  const hasCustomPortrait = false;
+  // Dhara's photo (public/portrait.jpg); set to false to fall back to the DP monogram tile
+  const hasCustomPortrait = true;
 
-  // Ambient cursor glow and portrait tilt (Brief §8.5 - fine pointer only)
+  // Ambient cursor glow (Brief §8.5 / Phase 7 §1 - fine pointer only)
   useEffect(() => {
     const isFine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!isFine || !heroRef.current) return;
+    if (!isFine || !heroRef.current || !glowRef.current) return;
 
     const hero = heroRef.current;
-    const card = cardRef.current;
     const glow = glowRef.current;
 
     let targetX = 0;
     let targetY = 0;
     let currentX = 0;
     let currentY = 0;
-    let targetTiltX = 0;
-    let targetTiltY = 0;
-    let currentTiltX = 0;
-    let currentTiltY = 0;
     let isHovering = false;
     let rafId: number;
 
@@ -41,26 +36,14 @@ export function Hero() {
 
       if (!isHovering) {
         isHovering = true;
-        if (glow) glow.style.opacity = "1";
+        glow.style.opacity = "1";
       }
-
-      if (card) {
-        const cardRect = card.getBoundingClientRect();
-        const cardCenterX = cardRect.left + cardRect.width / 2;
-        const cardCenterY = cardRect.top + cardRect.height / 2;
-        const dx = (e.clientX - cardCenterX) / (cardRect.width / 2);
-        const dy = (e.clientY - cardCenterY) / (cardRect.height / 2);
-        // Max 6deg
-        targetTiltX = Math.max(-6, Math.min(6, -dy * 6));
-        targetTiltY = Math.max(-6, Math.min(6, dx * 6));
-      }
+      startLoop();
     };
 
     const onMouseLeave = () => {
       isHovering = false;
-      targetTiltX = 0;
-      targetTiltY = 0;
-      if (glow) glow.style.opacity = "0";
+      glow.style.opacity = "0";
     };
 
     let running = false;
@@ -72,42 +55,24 @@ export function Hero() {
     };
 
     const loop = () => {
-      currentX += (targetX - currentX) * 0.11;
-      currentY += (targetY - currentY) * 0.11;
-      currentTiltX += (targetTiltX - currentTiltX) * 0.11;
-      currentTiltY += (targetTiltY - currentTiltY) * 0.11;
+      currentX += (targetX - currentX) * 0.15;
+      currentY += (targetY - currentY) * 0.15;
 
-      if (glow) {
-        glow.style.setProperty("--sx", `${currentX}px`);
-        glow.style.setProperty("--sy", `${currentY}px`);
-      }
+      glow.style.setProperty("--sx", `${currentX}px`);
+      glow.style.setProperty("--sy", `${currentY}px`);
 
-      if (card) {
-        card.style.transform = `perspective(900px) rotateX(${currentTiltX.toFixed(2)}deg) rotateY(${currentTiltY.toFixed(2)}deg) rotate(-2deg)`;
-      }
-
-      const isSettled =
-        !isHovering &&
-        Math.abs(currentTiltX) < 0.05 &&
-        Math.abs(currentTiltY) < 0.05;
-
-      if (!isSettled) {
+      if (isHovering && (Math.abs(targetX - currentX) > 0.5 || Math.abs(targetY - currentY) > 0.5)) {
         rafId = requestAnimationFrame(loop);
       } else {
         running = false;
       }
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      onMouseMove(e);
-      startLoop();
-    };
-
-    hero.addEventListener("mousemove", handleMouseMove);
+    hero.addEventListener("mousemove", onMouseMove);
     hero.addEventListener("mouseleave", onMouseLeave);
 
     return () => {
-      hero.removeEventListener("mousemove", handleMouseMove);
+      hero.removeEventListener("mousemove", onMouseMove);
       hero.removeEventListener("mouseleave", onMouseLeave);
       cancelAnimationFrame(rafId);
     };
@@ -151,7 +116,7 @@ export function Hero() {
             {/* Location Tag */}
             <div
               data-intro="location"
-              className="inline-flex items-center gap-1.5 mb-3 text-[0.875rem] md:text-[0.9375rem] font-medium text-[var(--ink-soft)] font-body"
+              className="inline-flex items-center gap-1.5 mb-3 text-[length:var(--fs-sm)] font-medium text-[var(--ink-soft)] font-body"
             >
               <MapPin className="w-4 h-4 text-[var(--rust)] shrink-0" strokeWidth={2.25} />
               <span>{siteConfig.hero.location}</span>
@@ -160,7 +125,7 @@ export function Hero() {
             {/* Name Heading (H1) */}
             <h1
               data-intro="name"
-              className="font-display font-extrabold text-[clamp(2.75rem,7.5vw,7.25rem)] leading-[0.92] tracking-[-0.035em] text-[var(--ink)] mb-5 select-none max-w-full break-words"
+              className="font-display font-extrabold text-[clamp(3.25rem,15vw,4.5rem)] sm:text-[length:var(--fs-hero)] leading-[0.92] tracking-[-0.035em] text-[var(--ink)] mb-5 select-none max-w-full break-words"
             >
               <span className="block overflow-hidden pb-1">
                 <span className="hero-name-line inline-block will-change-transform">
@@ -183,7 +148,7 @@ export function Hero() {
 
             {/* Tagline */}
             <div data-intro="tagline" className="overflow-hidden mb-7 max-w-[560px]">
-              <p className="hero-tagline font-body text-[1rem] sm:text-[1.0625rem] md:text-[1.125rem] text-[var(--muted)] leading-[1.65]">
+              <p className="hero-tagline font-body text-[length:var(--fs-body)] text-[var(--muted)] leading-[1.65]">
                 {siteConfig.hero.tagline}
               </p>
             </div>
@@ -198,7 +163,7 @@ export function Hero() {
                 onClick={scrollToWork}
                 variant="primary"
                 showArrow
-                className="w-full sm:w-auto text-[1rem] md:text-[1.0625rem] py-3.5 px-6 shadow-[3px_4px_0_0_var(--ink)] hover:shadow-[5px_7px_0_0_var(--ink)]"
+                className="w-full sm:w-auto text-[length:var(--fs-base)] py-3.5 px-6 shadow-[3px_4px_0_0_var(--ink)] hover:shadow-[5px_7px_0_0_var(--ink)]"
               >
                 {siteConfig.hero.primaryCta.label.replace(" →", "")}
               </Button>
@@ -208,7 +173,7 @@ export function Hero() {
                 target="_blank"
                 variant="outline"
                 leadingIcon={<FileText className="w-4 h-4 text-[var(--ink)]" strokeWidth={2.25} />}
-                className="w-full sm:w-auto text-[1rem] md:text-[1.0625rem] py-3.5 px-6"
+                className="w-full sm:w-auto text-[length:var(--fs-base)] py-3.5 px-6"
               >
                 {siteConfig.hero.secondaryCta.label}
               </Button>
@@ -223,12 +188,12 @@ export function Hero() {
               viewBox="0 0 420 480"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="hero-blob absolute z-0 w-[300px] sm:w-[360px] md:w-[410px] h-[350px] sm:h-[415px] md:h-[475px] pointer-events-none select-none -translate-x-3 translate-y-1 transition-transform duration-700"
+              className="hero-blob absolute z-0 w-[78%] max-w-[320px] sm:w-[360px] md:w-[410px] h-auto aspect-[420/480] pointer-events-none select-none -translate-x-3 translate-y-1 transition-transform duration-700"
               aria-hidden="true"
             >
               <path
                 d="M 170 18 C 270 14, 380 40, 412 110 C 435 150, 420 210, 395 260 C 375 305, 365 375, 320 430 C 275 480, 190 475, 110 460 C 40 445, 0 395, 2 320 C 4 250, 30 200, 55 140 C 75 90, 95 22, 170 18 Z"
-                fill="#EEB0A2"
+                style={{ fill: "var(--coral)" }}
               />
             </svg>
 
@@ -252,7 +217,7 @@ export function Hero() {
             <div
               ref={cardRef}
               data-intro="portrait-card"
-              className="portrait-card relative z-10 w-[250px] sm:w-[290px] md:w-[320px] aspect-[4/4.7] rounded-[18px] border-[3px] border-[var(--ink)] shadow-[5px_7px_0_0_var(--ink)] bg-[var(--portrait)] p-4 flex items-center justify-center overflow-hidden select-none will-change-transform"
+              className="portrait-card relative z-10 w-[62%] max-w-[260px] sm:w-[290px] md:w-[320px] aspect-[4/4.7] rounded-[18px] border-[3px] border-[var(--ink)] shadow-[5px_7px_0_0_var(--ink)] bg-[var(--portrait)] p-4 flex items-center justify-center overflow-hidden select-none will-change-transform"
               style={{ transform: "rotate(-2deg)" }}
             >
               {hasCustomPortrait ? (
@@ -262,7 +227,7 @@ export function Hero() {
                     alt="Dhara Patadia"
                     fill
                     sizes="(max-width: 768px) 290px, 320px"
-                    className="object-cover"
+                    className="object-cover object-[50%_30%]"
                     priority
                   />
                 </div>
@@ -271,15 +236,15 @@ export function Hero() {
                   {/* Subtle inner organic shapes matching mockup */}
                   <div
                     aria-hidden="true"
-                    className="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-[#F5D5C5] opacity-60"
+                    className="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-[var(--blush-light)] opacity-60"
                   />
                   <div
                     aria-hidden="true"
-                    className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-[#EED8CC] opacity-70"
+                    className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-[var(--sand)] opacity-70"
                   />
 
                   {/* Large DP Monogram in Rust */}
-                  <span className="font-display font-extrabold text-[5.25rem] sm:text-[6.25rem] md:text-[7rem] text-[var(--rust)] tracking-tighter leading-none select-none z-10">
+                  <span className="font-display font-extrabold text-[4.5rem] sm:text-[6.25rem] md:text-[7rem] text-[var(--rust)] tracking-tighter leading-none select-none z-10">
                     {siteConfig.monogram}
                   </span>
                 </div>

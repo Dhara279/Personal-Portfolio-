@@ -15,7 +15,7 @@ export function About() {
           <div className="lg:col-span-7 flex flex-col gap-3 min-w-0">
             <Eyebrow sectionId="about">{siteConfig.about.eyebrow}</Eyebrow>
             <SectionHeading>{siteConfig.about.heading}</SectionHeading>
-            <p className="reveal font-body text-[1.0625rem] md:text-[1.125rem] text-[var(--muted)] leading-[1.68] mt-2 max-w-[620px]">
+            <p className="reveal font-body text-[length:var(--fs-body)] text-[var(--muted)] leading-[1.68] mt-2 max-w-[620px]">
               {siteConfig.about.paragraph}
             </p>
           </div>
@@ -33,10 +33,10 @@ export function About() {
               </div>
 
               <div>
-                <h3 className="font-display font-bold text-[1.25rem] md:text-[1.375rem] text-[var(--ink)] tracking-tight mb-3 pr-10">
+                <h3 className="font-display font-bold text-[length:var(--fs-lg)] text-[var(--ink)] tracking-tight mb-3 pr-10">
                   {siteConfig.about.cardTitle}
                 </h3>
-                <p className="font-body text-[0.9375rem] md:text-[1rem] text-[var(--muted)] leading-[1.62] mb-6">
+                <p className="font-body text-[length:var(--fs-base)] text-[var(--muted)] leading-[1.62] mb-6">
                   {siteConfig.about.cardText}
                 </p>
               </div>

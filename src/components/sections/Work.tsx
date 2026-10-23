@@ -83,9 +83,9 @@ export function Work() {
                 {/* Browser Top Bar */}
                 <div className="h-8 bg-[var(--cream-2)] border-b border-[var(--ink)]/20 px-3 flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#E57373]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#FFD54F]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#81C784]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[var(--terracotta)] border border-[var(--ink)]/20" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[var(--sand)] border border-[var(--ink)]/20" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[var(--sage)] border border-[var(--ink)]/20" />
                   </div>
                   <span className="font-body font-bold text-[0.75rem] text-[var(--ink-soft)]">
                     MLense
@@ -273,27 +273,27 @@ export function Work() {
                 <div className="sm:col-span-5 h-[160px] rounded-[12px] bg-[var(--white)]/70 border border-[var(--ink)]/15 px-3 py-3 relative flex items-center justify-between overflow-hidden">
                   {/* 3 Stacked Input Tiles */}
                   <div className="flex flex-col gap-1.5 shrink-0 z-10">
-                    <div className="w-7 h-6 rounded-[5px] bg-[var(--blush)] border border-[var(--ink)]/20 flex items-center justify-center shadow-xs">
+                    <div className="w-7 h-6 rounded-[5px] bg-[var(--blush)] border border-[var(--ink)]/20 flex items-center justify-center">
                       <ImageIcon className="w-3.5 h-3.5 text-[var(--rust)]" />
                     </div>
-                    <div className="w-7 h-6 rounded-[5px] bg-[var(--sage)] border border-[var(--ink)]/20 flex items-center justify-center shadow-xs">
+                    <div className="w-7 h-6 rounded-[5px] bg-[var(--sage)] border border-[var(--ink)]/20 flex items-center justify-center">
                       <FileText className="w-3.5 h-3.5 text-[var(--ink)]" />
                     </div>
-                    <div className="w-7 h-6 rounded-[5px] bg-[var(--sand)] border border-[var(--ink)]/20 flex items-center justify-center shadow-xs">
+                    <div className="w-7 h-6 rounded-[5px] bg-[var(--sand)] border border-[var(--ink)]/20 flex items-center justify-center">
                       <Video className="w-3.5 h-3.5 text-[var(--rust)]" />
                     </div>
                   </div>
 
                   {/* Connecting Arrow */}
-                  <div className="text-[var(--rust)] font-bold text-sm shrink-0">→</div>
+                  <ArrowRight className="w-3.5 h-3.5 text-[var(--rust)] shrink-0" strokeWidth={2} />
 
                   {/* Central Circular Node */}
-                  <div className="w-9 h-9 rounded-full bg-[var(--terracotta)] border-2 border-[var(--ink)] flex items-center justify-center text-white text-[0.625rem] font-bold shadow-xs shrink-0 z-10">
+                  <div className="w-9 h-9 rounded-full bg-[var(--terracotta)] border-2 border-[var(--ink)] flex items-center justify-center text-white text-[0.625rem] font-bold shrink-0 z-10">
                     LLM
                   </div>
 
                   {/* Output Arrow */}
-                  <div className="text-[var(--rust)] font-bold text-sm shrink-0">→</div>
+                  <ArrowRight className="w-3.5 h-3.5 text-[var(--rust)] shrink-0" strokeWidth={2} />
 
                   {/* Output Mini Bar Chart */}
                   <div className="flex items-end gap-1.5 h-12 pb-1 shrink-0 z-10">

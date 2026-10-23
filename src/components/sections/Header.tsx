@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { siteConfig } from "@/content/site";
 import { MonogramBadge } from "@/components/ui/MonogramBadge";
 import { Button } from "@/components/ui/Button";
@@ -11,10 +11,22 @@ export function Header() {
   const [isStuck, setIsStuck] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const navRef = useRef<HTMLElement>(null);
+  const linksRef = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
+  const [indicatorStyle, setIndicatorStyle] = useState<{
+    left: number;
+    width: number;
+    opacity: number;
+  }>({ left: 0, width: 0, opacity: 0 });
 
   useEffect(() => {
     const handleScroll = () => {
       setIsStuck(window.scrollY > 24);
+    };
+
+    const handleActiveChange = (e: Event) => {
+      const detail = (e as CustomEvent<string>).detail;
+      setActiveSection(detail || "");
     };
 
     if (typeof window !== "undefined" && window.location.search.includes("drawer=open")) {
@@ -22,13 +34,58 @@ export function Header() {
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("nav-active-change", handleActiveChange);
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("nav-active-change", handleActiveChange);
+    };
   }, []);
 
-  const burgerRef = React.useRef<HTMLButtonElement>(null);
-  const closeBtnRef = React.useRef<HTMLButtonElement>(null);
-  const prevOpenRef = React.useRef(false);
+  // Update sliding indicator position whenever activeSection changes
+  useEffect(() => {
+    if (!activeSection) {
+      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
+      return;
+    }
+
+    const activeEl = linksRef.current[activeSection];
+    if (activeEl && navRef.current) {
+      const navRect = navRef.current.getBoundingClientRect();
+      const elRect = activeEl.getBoundingClientRect();
+      setIndicatorStyle({
+        left: elRect.left - navRect.left,
+        width: elRect.width,
+        opacity: 1,
+      });
+    } else {
+      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
+    }
+  }, [activeSection]);
+
+  // Handle window resize for sliding indicator alignment
+  useEffect(() => {
+    const handleResize = () => {
+      if (!activeSection) return;
+      const activeEl = linksRef.current[activeSection];
+      if (activeEl && navRef.current) {
+        const navRect = navRef.current.getBoundingClientRect();
+        const elRect = activeEl.getBoundingClientRect();
+        setIndicatorStyle({
+          left: elRect.left - navRect.left,
+          width: elRect.width,
+          opacity: 1,
+        });
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [activeSection]);
+
+  const burgerRef = useRef<HTMLButtonElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const prevOpenRef = useRef(false);
 
   // Handle mobile drawer keyboard escape, focus management and scroll lock
   useEffect(() => {
@@ -101,26 +158,46 @@ export function Header() {
             aria-label="Dhara Patadia - Home"
           >
             <MonogramBadge size="sm" />
-            <span className="font-body font-bold text-[1.125rem] text-[var(--ink)] tracking-tight">
+            <span className="font-body font-bold text-[length:var(--fs-body)] text-[var(--ink)] tracking-tight">
               {siteConfig.name}
             </span>
           </Link>
 
           {/* Desktop Navigation Links (>=900px) */}
           <nav
+            ref={navRef}
             aria-label="Primary"
-            className="nav-desktop items-center gap-1 md:gap-2"
+            className="nav-desktop relative items-center gap-1 md:gap-2 p-1"
           >
-            {siteConfig.navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                className="px-3.5 py-1.5 rounded-full font-body font-semibold text-[0.9375rem] text-[var(--ink)] transition-colors duration-200 hover:bg-[var(--ink)]/[0.07] focus-visible:bg-[var(--ink)]/[0.07]"
-              >
-                {item.label}
-              </a>
-            ))}
+            {/* Sliding active highlight indicator (Brief §8.3 / Phase 7 §2.3) */}
+            <span
+              aria-hidden="true"
+              className="absolute h-[34px] rounded-full bg-[var(--ink)]/[0.07] pointer-events-none transition-[transform,width,opacity] duration-350 ease-[var(--ease-out)]"
+              style={{
+                transform: `translateX(${indicatorStyle.left}px)`,
+                width: `${indicatorStyle.width}px`,
+                opacity: indicatorStyle.opacity,
+              }}
+            />
+
+            {siteConfig.navItems.map((item) => {
+              const secId = item.href.replace("#", "");
+              const isActive = activeSection === secId;
+              return (
+                <a
+                  key={item.label}
+                  ref={(el) => {
+                    linksRef.current[secId] = el;
+                  }}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  aria-current={isActive ? "true" : undefined}
+                  className="relative z-10 px-3.5 py-1.5 rounded-full font-body font-semibold text-[length:var(--fs-sm)] text-[var(--ink)] transition-colors duration-200 hover:text-[var(--ink-deep)] focus-visible:bg-[var(--ink)]/[0.07]"
+                >
+                  {item.label}
+                </a>
+              );
+            })}
           </nav>
 
           {/* Right Action: Desktop View CV button + Mobile Burger */}
@@ -131,9 +208,12 @@ export function Header() {
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="primary"
-                className="text-[0.875rem] py-2 px-4 shadow-[2px_3px_0_0_var(--ink)] hover:shadow-[3px_4px_0_0_var(--ink)]"
+                className="whitespace-nowrap text-[length:var(--fs-sm)] py-2 px-4 shadow-[2px_3px_0_0_var(--ink)] hover:shadow-[3px_4px_0_0_var(--ink)]"
               >
-                View CV →
+                <span className="inline-flex items-center">
+                  View CV
+                  <ArrowRight className="w-4 h-4 ml-1.5 shrink-0" strokeWidth={2} />
+                </span>
               </Button>
             </div>
 
@@ -175,7 +255,7 @@ export function Header() {
 
         {/* Slide-over Drawer Panel */}
         <div
-          className={`absolute top-0 right-0 bottom-0 w-[280px] max-w-[85vw] bg-[var(--cream)] border-l-2 border-[var(--ink)] shadow-[-4px_0_12px_rgba(0,0,0,0.1)] p-6 flex flex-col justify-between transition-transform duration-300 ease-out ${
+          className={`absolute top-0 right-0 bottom-0 w-[280px] max-w-[85vw] bg-[var(--cream)] border-l-2 border-[var(--ink)] p-6 flex flex-col justify-between transition-transform duration-300 ease-out ${
             mobileDrawerOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
@@ -183,7 +263,7 @@ export function Header() {
             <div className="flex items-center justify-between pb-4 border-b border-[var(--ink)]/15">
               <div className="flex items-center gap-2.5">
                 <MonogramBadge size="sm" />
-                <span className="font-body font-bold text-[1.0625rem] text-[var(--ink)]">
+                <span className="font-body font-bold text-[length:var(--fs-body)] text-[var(--ink)]">
                   {siteConfig.name}
                 </span>
               </div>
@@ -204,7 +284,7 @@ export function Header() {
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className="px-4 py-3 rounded-lg font-body font-bold text-[1.125rem] text-[var(--ink)] hover:bg-[var(--ink)]/[0.07] transition-colors"
+                  className="px-4 py-3 rounded-lg font-body font-bold text-[length:var(--fs-body)] text-[var(--ink)] hover:bg-[var(--ink)]/[0.07] transition-colors"
                 >
                   {item.label}
                 </a>
@@ -217,11 +297,14 @@ export function Header() {
               href={siteConfig.cvPath}
               target="_blank"
               variant="primary"
-              className="w-full justify-center"
+              className="w-full justify-center whitespace-nowrap"
             >
-              View CV →
+              <span className="inline-flex items-center">
+                View CV
+                <ArrowRight className="w-4 h-4 ml-1.5 shrink-0" strokeWidth={2} />
+              </span>
             </Button>
-            <p className="text-center font-body text-[0.8125rem] text-[var(--muted)]">
+            <p className="text-center font-body text-[length:var(--fs-sm)] text-[var(--muted)]">
               {siteConfig.location}
             </p>
           </div>
