@@ -1,6 +1,0 @@
-{
-  "headers": [
-    { "source": "/icon", "headers": [{ "key": "Content-Type", "value": "image/png" }] },
-    { "source": "/opengraph-image", "headers": [{ "key": "Content-Type", "value": "image/png" }] }
-  ]
-}
