@@ -42,6 +42,8 @@ export interface ExperienceItem {
   role: string;
   dates: string;
   monogram: string;
+  /** Official logo file (public/logos). Without one, the letter tile is shown. */
+  logo?: LogoImage;
   badgeTone: "sage" | "sand" | "blush";
   expandedText: string;
 }
@@ -52,13 +54,22 @@ export interface EducationItem {
   degree: string;
   grade: string;
   icon: "Crown" | "GraduationCap";
+  /** Official logo file (public/logos). Without one, the icon is shown. */
+  logo?: LogoImage;
+}
+
+/** Display size of a logo in CSS pixels (keeps its original aspect ratio). */
+export interface LogoImage {
+  src: string;
+  width: number;
+  height: number;
 }
 
 export const siteConfig = {
   name: "Dhara Patadia",
   monogram: "DP",
-  title: "Dhara Patadia — AI Product Ownership & Operations",
-  roleSubtitle: "AI Product Ownership & Operations",
+  title: "Dhara Patadia · AI Strategist | Product Owner | AI Operations",
+  roleSubtitle: "AI Strategist | Product Owner | AI Operations",
   tagline: "Turning complex AI ideas into products people can use.",
   location: "Cambridge, UK",
   email: "patadiadhara79@gmail.com",
@@ -79,31 +90,31 @@ export const siteConfig = {
     location: "Cambridge, UK",
     nameLine1: "Dhara",
     nameLine2: "Patadia",
-    subtitle: "AI Product Ownership & Operations",
-    tagline: "Turning complex AI ideas into products people can use.",
-    primaryCta: { label: "Explore my work →", href: "#work" },
+    subtitle: "AI Strategist | Product Owner | AI Operations",
+    tagline:
+      "I connect business needs with practical AI solutions - from shaping product direction to delivery and day-to-day operations.",
+    primaryCta: { label: "Explore my work", href: "#work" },
     secondaryCta: { label: "View CV", href: "/Dhara_Patadia_CV.pdf" },
   },
 
   stats: [
     {
-      id: "stat-mlense",
+      id: "stat-strategy",
       tone: "sand",
-      icon: "Rocket",
+      icon: "Layers",
       iconColor: "rust",
+      value: "AI Strategy",
+      label: "Pre-built recommendation templates to guide model training.",
+    },
+    {
+      id: "stat-mlense",
+      tone: "sage",
+      icon: "Rocket",
+      iconColor: "ink",
       value: "12 weeks",
       numericTarget: 12,
       suffix: " weeks",
-      label: "MLense production launch",
-    },
-    {
-      id: "stat-tasks",
-      tone: "sage",
-      icon: "Layers",
-      iconColor: "ink",
-      value: "7",
-      numericTarget: 7,
-      label: "ML task types",
+      label: "MLense roadmap to production",
     },
     {
       id: "stat-datapoints",
@@ -113,23 +124,23 @@ export const siteConfig = {
       value: "~5,000",
       prefix: "~",
       numericTarget: 5000,
-      label: "Data points reviewed monthly",
+      label: "Data points reviewed monthly at Amazon",
     },
     {
       id: "stat-msc",
       tone: "sand",
       icon: "GraduationCap",
       iconColor: "ink",
-      value: "Distinction",
-      label: "MSc Big Data Science",
+      value: "MSc · Distinction",
+      label: "Big Data Science",
     },
   ] as StatItem[],
 
   about: {
     eyebrow: "ABOUT",
-    heading: "From product vision to reliable AI.",
+    heading: "From strategy and product vision to reliable AI.",
     paragraph:
-      "I work across AI product delivery, data quality and adoption. My experience spans launching MLense at Data Pixel and supporting multimodal machine-learning data at Amazon.",
+      "I work across AI strategy, product delivery, data quality and adoption. My experience spans launching MLense at Data Pixel and supporting multimodal machine-learning data at Amazon. At MLense, my strategy work included developing pre-built recommendation templates to guide model training.",
     cardTitle: "Writing, community and curiosity.",
     cardText:
       "Outside of work, I enjoy exploring ideas through writing, being part of community initiatives and staying curious. It helps me bring a broader perspective to the work I do.",
@@ -146,9 +157,9 @@ export const siteConfig = {
         icon: "Target",
         title: "Product Ownership",
         lines: [
-          "Define product strategy",
-          "Prioritise roadmaps",
-          "Drive delivery and adoption",
+          "MVP scoping and roadmaps",
+          "Sprint planning and acceptance criteria",
+          "Change requests and user feedback loops",
         ],
       },
       {
@@ -157,9 +168,9 @@ export const siteConfig = {
         icon: "Settings",
         title: "AI Operations",
         lines: [
-          "Support data quality",
-          "Manage annotation workflows",
-          "Enable scalable operations",
+          "Develop pre-built recommendation templates to guide model training",
+          "Translate AI strategy into practical workflows",
+          "Support data quality and resolve annotation edge cases",
         ],
       },
       {
@@ -168,9 +179,9 @@ export const siteConfig = {
         icon: "BarChart3",
         title: "Process Improvement",
         lines: [
-          "Identify bottlenecks",
-          "Streamline workflows",
-          "Build practical solutions",
+          "Business needs into requirements",
+          "Impact analysis and implementation plans",
+          "Pilot-first rollout",
         ],
       },
       {
@@ -179,9 +190,9 @@ export const siteConfig = {
         icon: "Users",
         title: "Stakeholder Collaboration",
         lines: [
-          "Work across technical and non-technical teams",
-          "Align on goals and outcomes",
-          "Support clear communication",
+          "Requirements gathering and client demos",
+          "Presentations for technical and non-technical audiences",
+          "Onboarding and mentoring",
         ],
       },
     ] as ExpertiseItem[],
@@ -201,7 +212,7 @@ export const siteConfig = {
   selectedWork: {
     eyebrow: "SELECTED WORK",
     heading: "Decisions. Delivery. Impact.",
-    viewAllCta: { label: "View all work →", href: "/work" },
+    viewAllCta: { label: "View all work", href: "/work" },
     items: [
       {
         id: "work-mlense",
@@ -211,7 +222,7 @@ export const siteConfig = {
         title: "MLense",
         subtitle: "No-code AutoML product launch",
         meta: "Roadmap to production in 12 weeks.",
-        ctaText: "View case study →",
+        ctaText: "View case study",
         ctaVariant: "primary",
         illustrationType: "mlense",
       },
@@ -223,7 +234,7 @@ export const siteConfig = {
         title: "Amazon",
         subtitle: "Improving how teams share resolved issues",
         meta: "Proposal under review. 4 teams mapped.",
-        ctaText: "View case study →",
+        ctaText: "View case study",
         ctaVariant: "outline",
         illustrationType: "amazon",
       },
@@ -235,7 +246,7 @@ export const siteConfig = {
         title: "MSc Research",
         subtitle: "Multimodal content prediction",
         meta: "500 videos, 79% lower average error vs metadata-only baseline.",
-        ctaText: "View case study →",
+        ctaText: "View case study",
         ctaVariant: "outline",
         illustrationType: "msc",
       },
@@ -253,6 +264,7 @@ export const siteConfig = {
         role: "Senior ML Data Associate II",
         dates: "Nov 2025 – Present",
         monogram: "A",
+        logo: { src: "/logos/companies/amazon.svg", width: 54, height: 16 },
         badgeTone: "sage",
         expandedText:
           "Monthly multimodal annotation and quality review, supporting machine-learning models with high-quality data across audio, image, video and text. Work with cross-functional teams to resolve edge cases and improve data quality at scale.",
@@ -262,7 +274,8 @@ export const siteConfig = {
         company: "Data Pixel",
         role: "AI Product Lead",
         dates: "Nov 2024 – Nov 2025",
-        monogram: "DP",
+        monogram: "D",
+        logo: { src: "/logos/companies/data-pixel.png", width: 28, height: 25 },
         badgeTone: "blush",
         expandedText:
           "Owned MLense, a no-code AutoML platform covering 7 machine-learning task types. Led 2 developers and a 5-person marketing agency through 6 two-week sprints, taking the product from proof of concept to production launch on Google Cloud in 12 weeks.",
@@ -273,6 +286,7 @@ export const siteConfig = {
         role: "Business Analyst Intern",
         dates: "Mar 2023 – Apr 2023",
         monogram: "S",
+        logo: { src: "/logos/companies/satv-script.png", width: 54, height: 17 },
         badgeTone: "sand",
         expandedText:
           "Mapped use cases for a client's existing product and turned the findings into written summaries and presentations for the client team.",
@@ -287,6 +301,7 @@ export const siteConfig = {
         degree: "MSc Big Data Science",
         grade: "Distinction",
         icon: "Crown",
+        logo: { src: "/logos/education/qmul.svg", width: 87, height: 23 },
       },
       {
         id: "edu-atmiya",
@@ -294,13 +309,14 @@ export const siteConfig = {
         degree: "B.Tech Computer Engineering",
         grade: "First Class with Distinction",
         icon: "GraduationCap",
+        logo: { src: "/logos/education/atmiya.png", width: 30, height: 34 },
       },
     ] as EducationItem[],
   },
 
   contact: {
     eyebrow: "CONTACT",
-    heading: "Let's talk about better AI products.",
+    heading: "Let’s talk about better AI strategies and products.",
     email: "patadiadhara79@gmail.com",
     linkedInLabel: "LinkedIn",
     linkedInUrl: "https://www.linkedin.com/in/dhara-patadia-617947188",
@@ -310,6 +326,6 @@ export const siteConfig = {
 
   footer: {
     name: "Dhara Patadia",
-    meta: "AI Product Ownership & Operations · Cambridge, UK",
+    meta: "AI Strategist | Product Owner | AI Operations · Cambridge, UK",
   },
 };

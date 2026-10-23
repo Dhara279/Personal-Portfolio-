@@ -43,7 +43,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "mlense",
     number: "01",
     shortTitle: "MLense",
-    title: "MLense — No-code AutoML product launch",
+    title: "MLense: No-code AutoML product launch",
     tone: "blush",
     summary:
       "Taking a no-code AutoML platform from proof of concept to production launch on Google Cloud in 12 weeks.",
@@ -51,12 +51,12 @@ export const caseStudies: CaseStudy[] = [
       role: "AI Product Lead, Data Pixel Ltd",
       timeline: "Nov 2024 – Nov 2025",
       team: "2 developers + a 5-person marketing agency",
-      status: "Launched — v1.0 on Google Cloud",
+      status: "Launched: v1.0 on Google Cloud",
     },
     overview: [
       {
         label: "The problem",
-        text: "Model building was slow — a problem I saw first-hand. MLense set out to let business analysts and domain experts train and explain models in the browser, without coding.",
+        text: "Model building was slow, a problem I saw first-hand. MLense set out to let business analysts and domain experts train and explain models in the browser, without coding.",
       },
       {
         label: "The approach",
@@ -64,7 +64,7 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         label: "The impact",
-        text: "MLense went from proof of concept (v0.1) to production launch on Google Cloud (v1.0) in 12 weeks, with 70 automated tests passing and 6 security issues fixed.",
+        text: "MLense went from proof of concept (v0.1) to production launch on Google Cloud (v1.0), with 70 automated tests passing and 6 security issues fixed.",
       },
     ],
     sections: [
@@ -79,7 +79,7 @@ export const caseStudies: CaseStudy[] = [
         id: "how-we-delivered",
         heading: "How we delivered",
         paragraphs: [
-          "We ran delivery in 6 two-week sprints over 12 weeks, each with agreed scope and acceptance criteria. I ran client demos and logged every change request in writing, from new features to UX fixes.",
+          "We ran delivery in 6 two-week sprints, each with agreed scope and acceptance criteria. I ran client demos and logged every change request in writing, from new features to UX fixes.",
         ],
       },
       {
@@ -121,7 +121,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "amazon-guidance",
     number: "02",
     shortTitle: "Amazon",
-    title: "Amazon — Improving how teams share resolved issues",
+    title: "Amazon: Improving how teams share resolved issues",
     tone: "sage",
     summary:
       "A proposal to get resolved issues into the guidance teams work from, faster.",
@@ -150,7 +150,7 @@ export const caseStudies: CaseStudy[] = [
         id: "context",
         heading: "Context",
         paragraphs: [
-          "I annotate and quality-check about 5,000 multimodal training data points a month — audio, video, image and text — and resolve edge cases that fall outside the annotation guidelines. I noticed that resolved SIM tickets took too long to reach the convention pages teams work from.",
+          "I annotate and quality-check about 5,000 multimodal training data points a month (audio, video, image and text) and resolve edge cases that fall outside the annotation guidelines. I noticed that resolved SIM tickets took too long to reach the convention pages teams work from.",
         ],
       },
       {
@@ -195,7 +195,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "msc-research",
     number: "03",
     shortTitle: "MSc Research",
-    title: "MSc Research — Multimodal content prediction",
+    title: "MSc Research: Multimodal content prediction",
     tone: "sand",
     summary:
       "Predicting YouTube view counts from metadata and LLM-scored transcripts.",
@@ -224,14 +224,14 @@ export const caseStudies: CaseStudy[] = [
         id: "the-dissertation",
         heading: "The dissertation",
         paragraphs: [
-          "Multimodal AI for Predicting the Success of Content Creation — MSc Big Data Science, Queen Mary University of London, awarded with Distinction.",
+          "Multimodal AI for Predicting the Success of Content Creation: my MSc Big Data Science dissertation at Queen Mary University of London, awarded with Distinction.",
         ],
       },
       {
         id: "scoring-framework",
         heading: "An 11-question LLM scoring framework",
         paragraphs: [
-          "I designed an 11-question framework — covering clarity, engagement, credibility and more — that used an LLM to score each transcript. The scores became features for the prediction model.",
+          "I designed an 11-question framework (clarity, engagement, credibility and more) that used an LLM to score each transcript. The scores became features for the prediction model.",
         ],
       },
       {
